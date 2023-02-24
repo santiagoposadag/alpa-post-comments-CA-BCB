@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        //mavenLocal()
+        //maven { url '...' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'alpha-bcb'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':mongo-repository'
+project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')
+include ':async-event-bus'
+project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')
+include ':mq-sender'
+project(':mq-sender').projectDir = file('./infrastructure/driven-adapters/mq-sender')
+include ':reactive-web'
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':serializer'
+project(':serializer').projectDir = file('./infrastructure/helpers/serializer')
+include ':async-event-handler'
+project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
