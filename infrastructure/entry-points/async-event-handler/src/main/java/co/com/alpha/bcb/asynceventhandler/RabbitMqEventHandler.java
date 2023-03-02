@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class RabbitMqEventHandler {
 
     public static final String EVENTS_QUEUE = "events.queue";
-
+    public static final String GENERAL_QUEUE = "general.queue";
     private final Logger logger = Logger.getLogger("RabbitMqEventHandler");
     private final JSONMapper mapper = new JSONMapperImpl();
 
@@ -31,13 +31,28 @@ public class RabbitMqEventHandler {
         Notification notification = Notification.from(message);
         if(notification.getType()
                 .equals("co.com.alpha.bcb.model.post.events.PostCreated")){
-            logger.info(notification.toString());
+            logger.info("1: " + notification.toString());
             this.useCase.apply(Mono
                     .just((PostCreated) mapper.readFromJson(notification.getBody(),
                             PostCreated.class)))
                     .subscribe();
         }else{
-            logger.info("we currently don't have a listener for that event " +notification.toString());
+            logger.info("1: " + "we currently don't have a listener for that event " +notification.toString());
+        }
+    }
+
+    @RabbitListener(queues = GENERAL_QUEUE)
+    public void listenerGeneral(String message) throws ClassNotFoundException {
+        Notification notification = Notification.from(message);
+        if(notification.getType()
+                .equals("co.com.alpha.bcb.model.post.events.PostCreated")){
+            logger.info("2:" + notification.toString());
+            /*this.useCase.apply(Mono
+                    .just((PostCreated) mapper.readFromJson(notification.getBody(),
+                            PostCreated.class)))
+                    .subscribe();*/
+        }else{
+            logger.info("2:" + "we currently don't have a listener for that event " +notification.toString());
         }
     }
 }
